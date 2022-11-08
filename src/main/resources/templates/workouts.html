@@ -1,0 +1,40 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Workoutlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Workouts</h1>
+	<div class="col-md-4">
+		<h4 th:inline="text">Search for training sessions by choosing the date of your workout</h4>
+	</div>
+	<form th:object="${workout}" th:action="@{/search}" method="get">
+        <input type="date" name="search" id="search"/>
+        <input type="submit" value="Search"/>
+        <div th:if="${not #lists.isEmpty(search)}">
+            <h2>Workouts</h2>
+            <table class="table table-striped">
+                <tr>
+                	<th>Date</th>
+                    <th>Reps</th>
+                    <th>Sets</th>
+                    <th>Weight</th>
+                    <th>Type</th>
+                </tr>
+                <tr th:each="workouts: ${search}">
+                	<td th:text="${workouts.date}"></td>
+                    <td th:text="${workouts.repetitions}"></td>
+		    		<td th:text="${workouts.sets}"></td>
+		    		<td th:text="${workouts.weight}"></td>
+		    		<td th:text="${workouts.type.name}"></td> 
+		    		<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete1/{id}(id=${workouts.id})}" class="btn btn-danger">Delete</a></td>
+    				<td><a th:href="@{/edit1/{id}(id=${workouts.id})}" class="btn btn-success">Edit</a></td>
+                </tr>
+            </table>
+        </div>
+    </form>
+    <a href="/workoutlist" class="btn btn-success">Back to homepage</a>
+</body>
+</html>

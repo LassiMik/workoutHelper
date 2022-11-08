@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+<head>
+    <title>Workoutlist</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+	<h1>Workouts</h1>
+	<div class="col-md-4">
+		<h3 th:inline="text">Welcome [[${#httpServletRequest.remoteUser}]]</h3>
+	</div>
+	<div class="col-md-4">
+		<h4 th:inline="text">Here are your previous workouts, [[${#httpServletRequest.remoteUser}]]</h4>
+	</div>
+	<div class="col-md-4">
+		<h5 th:inline="text">Use the search function to search for a specific training session</h5>
+		<a href="/search" class="btn btn-success">Search</a>
+		<a href="/add" class="btn btn-success">Add workout</a>
+	</div>
+    <table class="table table-striped">
+		<tr>
+			<th>Date</th>
+		    <th>Reps</th>
+		    <th>Sets</th>
+		    <th>Weight</th>
+		    <th>Exercise</th>
+		</tr>  
+    	<tr th:each = "workout : ${workouts}">
+    		<td th:text="${workout.date}"></td>
+    		<td th:text="${workout.repetitions}"></td>
+    		<td th:text="${workout.sets}"></td>
+    		<td th:text="${workout.weight}"></td>
+    		<td th:text="${workout.type.name}"></td> 	
+    		<td sec:authorize="hasAuthority('ADMIN')"><a th:href="@{/delete/{id}(id=${workout.id})}" class="btn btn-danger">Delete</a></td>
+    		<td><a th:href="@{/edit/{id}(id=${workout.id})}" class="btn btn-success">Edit</a></td>
+    	</tr>
+     </table>
+     <div class="col-md-4" style="padding:20px 0">
+		<form th:action="@{/logout}" method="post">
+			<input type="submit" value="Sign Out" class="btn btn-sm btn-danger"/>
+		</form>
+	</div>
+</body>
+</html>
